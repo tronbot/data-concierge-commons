@@ -1,0 +1,24 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+}
+
+apply plugin: 'groovy'
+apply plugin: 'eclipse'
+
+jar {
+	baseName = 'data-concierge-commons'
+	version = '0.0.1-SNAPSHOT'
+}
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenCentral()
+}
+
+
+dependencies {
+	compile('org.codehaus.groovy:groovy')
+}
