@@ -15,7 +15,7 @@ import io.tronbot.dc.common.json.JsonPathReflector
 class JsonTester {
 	@Test
 	public void testReflector() throws Exception{
-		URL url = new URL('https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyCzR2RLfJp-fF1Ui0tPRwKXLNWTDXDUu3E&placeid=ChIJhdOq4PIG3IARImO0W3zpAdg')
+		URL url = new URL('https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyCzR2RLfJp-fF1Ui0tPRwKXLNWTDXDUu3E&placeid=ChIJP_65xt8G3IARg_RH0jTJpHY')
 		JsonPathReflector jr = new JsonPathReflector()
 		Business biz = jr.from(IOUtils.toString(url), new Business())
 		println ReflectionToStringBuilder.reflectionToString(biz);

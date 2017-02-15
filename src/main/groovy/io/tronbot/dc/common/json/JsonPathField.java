@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target({ ElementType.ANNOTATION_TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface JsonPathField {
-	String value();
+	String value() default "";
 
 	Class<? extends Interpreter<?>> interpreter() default EmptyInterpreter.class;
 

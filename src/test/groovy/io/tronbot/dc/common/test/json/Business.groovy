@@ -25,6 +25,10 @@ public class Business{
 	String phone
 	@JsonPathField('$.result.formatted_address')
 	String address
+	@JsonPathField
+	Address addr
+	@JsonPathField
+	Address addr2
 	@JsonPathField(value = '$.result.address_components[?(\'street_number\' in @.types )].long_name', interpreter=ArrayToSingleInterpreter.class)
 	String streetNumber
 	@JsonPathField(value = '$.result.address_components[?(\'route\' in @.types )].long_name', interpreter=ArrayToSingleInterpreter.class)
@@ -48,4 +52,23 @@ public class Business{
 	@JsonPathField('$.result.geometry.location.lng')
 	Double longitude
 	Date timestamp = new Date()
+}
+
+class Address{
+	@JsonPathField(value = '$.result.address_components[?(\'street_number\' in @.types )].long_name', interpreter=ArrayToSingleInterpreter.class)
+	String streetNumber
+	@JsonPathField(value = '$.result.address_components[?(\'route\' in @.types )].long_name', interpreter=ArrayToSingleInterpreter.class)
+	String streetName
+	@JsonPathField(value = '$.result.address_components[?(\'locality\' in @.types )].long_name', interpreter=ArrayToSingleInterpreter.class)
+	String city
+	@JsonPathField(value = '$.result.address_components[?(\'administrative_area_level_2\' in @.types )].long_name', interpreter=ArrayToSingleInterpreter.class)
+	String county
+	@JsonPathField(value = '$.result.address_components[?(\'administrative_area_level_1\' in @.types )].long_name', interpreter=ArrayToSingleInterpreter.class)
+	String state
+	@JsonPathField(value = '$.result.address_components[?(\'postal_code\' in @.types )].long_name', interpreter=ArrayToSingleInterpreter.class)
+	String postalCode
+	@JsonPathField(value = '$.result.address_components[?(\'postal_code_suffix\' in @.types )].long_name', interpreter=ArrayToSingleInterpreter.class)
+	String postalCodeSuffix
+	@JsonPathField(value = '$.result.address_components[?(\'country\' in @.types )].long_name', interpreter=ArrayToSingleInterpreter.class)
+	String country
 }

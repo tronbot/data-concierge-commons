@@ -67,7 +67,7 @@ public class JsonPathReflector {
 						// Invoke the default constructor
 						Object rawObj = ConstructorUtils.invokeConstructor(f.getType());
 						// Recursively invoke eval for custom object
-						eval(doc.read(jpath.value()), rawObj);
+						FieldUtils.writeField(f, obj, eval(doc, rawObj), true);
 					} catch (ReflectiveOperationException e) {
 						logger.warn("Json path field %s:%s must have a default public constructor",
 								f.getName(), f.getType());
