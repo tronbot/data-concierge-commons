@@ -20,5 +20,7 @@ repositories {
 
 
 dependencies {
-	compile('org.codehaus.groovy:groovy')
+	compile('org.codehaus.groovy:groovy:2.4.8')
+	compile("com.jayway.jsonpath:json-path:2.2.0")
+	compile("org.apache.commons:commons-lang3:3.5")
 }

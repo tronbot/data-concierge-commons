@@ -1,25 +1,137 @@
-.gradle
-/build/
-!gradle/wrapper/gradle-wrapper.jar
+######################
+# Node
+######################
+/node/**
+/node_tmp/**
+/node_modules/**
 
-### STS ###
-.apt_generated
-.classpath
+######################
+# SASS
+######################
+.sass-cache/**
+
+######################
+# Eclipse
+######################
+*.pydevproject
 .factorypath
 .project
-.settings
-.springBeans
+.metadata
+/tmp/**
+/tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/**
+.loadpath
+/src/main/resources/rebel.xml
 
-### IntelliJ IDEA ###
-.idea
-*.iws
+# External tool builders
+.externalToolBuilders/**
+
+# Locally stored "Eclipse launch configurations"
+#*.launch
+
+# CDT-specific
+.cproject
+
+# PDT-specific
+.buildpath
+
+######################
+# Intellij
+######################
+.idea/**
 *.iml
+*.iws
 *.ipr
+*.ids
+*.orig
 
-### NetBeans ###
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-.nb-gradle/
+######################
+# Visual Studio Code
+######################
+.vscode/**
+
+######################
+# Maven
+######################
+/log/**
+/target/**
+
+######################
+# Gradle
+######################
+.gradle/**
+
+######################
+# Package Files
+######################
+*.jar
+*.war
+*.ear
+*.db
+
+######################
+# Windows
+######################
+# Windows image file caches
+Thumbs.db
+
+# Folder config file
+Desktop.ini
+
+######################
+# Mac OSX
+######################
+.DS_Store
+.svn
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+######################
+# Directories
+######################
+/build/**
+/bin/**
+/spring_loaded/**
+/deploy/**
+
+######################
+# Logs
+######################
+*.log
+
+######################
+# Others
+######################
+*.class
+*.mdmp
+*.*~
+*~
+.merge_file*
+
+######################
+# Gradle Wrapper
+######################
+!gradle/wrapper/gradle-wrapper.jar
+
+######################
+# Maven Wrapper
+######################
+!.mvn/wrapper/maven-wrapper.jar
+
+######################
+# ESLint
+######################
+.eslintcache
+/.apt_generated/
+/behavior-tester/
