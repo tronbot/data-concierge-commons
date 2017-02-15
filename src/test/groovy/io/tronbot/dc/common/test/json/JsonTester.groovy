@@ -15,7 +15,7 @@ import io.tronbot.dc.common.json.JsonPathReflector
 class JsonTester {
 	@Test
 	public void testReflector() throws Exception{
-		URL url = new URL('http://localhost:8000/reconciliation/businessRaw?q=Saint%20Thomas%20Hickman%20Hospital,135%20E%20Swan%20St,%20Centerville,TN,37033,%20')
+		URL url = new URL('https://maps.googleapis.com/maps/api/place/details/json?key=AIzaSyCzR2RLfJp-fF1Ui0tPRwKXLNWTDXDUu3E&placeid=ChIJhdOq4PIG3IARImO0W3zpAdg')
 		JsonPathReflector jr = new JsonPathReflector()
 		Business biz = jr.from(IOUtils.toString(url), new Business())
 		println ReflectionToStringBuilder.reflectionToString(biz);

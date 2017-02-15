@@ -2,10 +2,11 @@ package io.tronbot.dc.common.json;
 
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
-import com.jayway.jsonpath.InvalidPathException;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.Predicate;
 
@@ -16,6 +17,8 @@ import io.tronbot.dc.common.json.JsonPathField.EmptyInterpreter;
  * @date Feb 13, 2017
  */
 public class JsonPathReflector {
+	private static final Logger logger = LoggerFactory.getLogger(JsonPathReflector.class);
+
 	private final Configuration configuration;
 
 	public JsonPathReflector() {
@@ -46,15 +49,33 @@ public class JsonPathReflector {
 					try {
 						Object value = readValue(doc, jpath);
 						FieldUtils.writeField(f, obj, value, true);
-					} catch (ReflectiveOperationException e) {
-						e.printStackTrace();
-					} catch (InvalidPathException e) {
-						if(jpath.required()){
-							throw e;
+					} catch (Exception e) {
+						logger.warn("Json path field %s:%s can't not be evaluated",
+								f.getName(), f.getType());
+						if (jpath.required()) {
+							throw new RuntimeException(e);
 						}
 					}
 				});
-
+		// Handle for Custom type fields
+		FieldUtils.getAllFieldsList(obj.getClass()).stream()
+				.filter(f -> null != f.getAnnotation(JsonPathField.class)
+						&& !Package.getPackage("java.lang").equals(f.getType().getPackage()))
+				.forEach(f -> {
+					JsonPathField jpath = f.getAnnotation(JsonPathField.class);
+					try {
+						// Invoke the default constructor
+						Object rawObj = ConstructorUtils.invokeConstructor(f.getType());
+						// Recursively invoke eval for custom object
+						eval(doc.read(jpath.value()), rawObj);
+					} catch (ReflectiveOperationException e) {
+						logger.warn("Json path field %s:%s must have a default public constructor",
+								f.getName(), f.getType());
+						if (jpath.required()) {
+							throw new RuntimeException(e);
+						}
+					}
+				});
 		return obj;
 	}
 
