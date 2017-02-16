@@ -50,7 +50,7 @@ public class JsonPathReflector {
 						Object value = readValue(doc, jpath);
 						FieldUtils.writeField(f, obj, value, true);
 					} catch (Exception e) {
-						logger.warn("Json path field %s:%s can't not be evaluated",
+						logger.info("Json path field %s:%s can't not be evaluated",
 								f.getName(), f.getType());
 						if (jpath.required()) {
 							throw new RuntimeException(e);
