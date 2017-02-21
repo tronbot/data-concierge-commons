@@ -101,7 +101,7 @@ public class JsonPathReflector {
 							// Handle for Custom type fields
 							evalPojoField(doc, elmt, obj, f);
 						}
-					} catch (Exception e) {
+					} catch (ReflectiveOperationException e) {
 						logger.info(String.format("Json path field %s:[%s] can't not be evaluated",
 								f.getName(), f.getType()));
 						if (elmt.required()) {
