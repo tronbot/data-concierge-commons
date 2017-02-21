@@ -6,9 +6,11 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.reflect.ConstructorUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.reflect.TypeUtils;
@@ -113,10 +115,11 @@ public class JsonPathReflector {
 
 	private void evalArrayField(DocumentContext doc, JsonPathElement elmt, Object obj, Field f)
 			throws ReflectiveOperationException {
-		//FIXME GAVE UP THE ARRAY!! :(
+		// FIXME GAVE UP THE ARRAY!! :(
 		List<Object> resLst = readJSONArray(doc, elmt, obj, f);
 		Object arry = Array.newInstance(f.getType().getComponentType(), resLst.size());
 		FieldUtils.writeField(f, obj, arry, true);
+		throw new NotImplementedException("The array type is not implemented, please use the java.util.Collection classes =_+");
 	}
 
 	private void evalPojoField(DocumentContext doc, JsonPathElement elmt, Object obj, Field f)
@@ -136,33 +139,9 @@ public class JsonPathReflector {
 
 	private List<Object> readJSONArray(DocumentContext doc, JsonPathElement elmt, Object obj, Field f)
 			throws ReflectiveOperationException {
-		Object res = readValue(doc, elmt);
-		Object arry;
-		if (jsonProvider.isArray(res)) {
-			arry = res;
-		} else {
-			// covert to array if resp is single
-			logger.info(String.format(
-					"Consider changing Collection field [%s.%s] to single object since json response is not an array!",
-					obj.getClass(), f.getName()));
-			arry = configuration.jsonProvider().createArray();
-			jsonProvider.setArrayIndex(arry, 0, res);
-		}
+		Object arry = readJSONAsArray(doc, elmt);
 		int arrayLength = jsonProvider.length(arry);
-		// Figure out entity type
-		Class<?> entityClz = null;
-		if (f.getType().isArray()) {
-			// f.getClass is good for array
-			entityClz = f.getType().getComponentType();
-		} else if (Collection.class.isAssignableFrom(f.getType()) && f.getGenericType() instanceof ParameterizedType) {
-			// get collection generic type if exists
-			Type entityType = ((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
-			try {
-				entityClz = Class.forName(TypeUtils.toString(entityType));
-			} catch (ClassNotFoundException e) {
-				// No class? take it as weak type, return json object
-			}
-		}
+		Class<?> entityClz = resolveFieldClass(f);
 		List<Object> lst = new ArrayList<>(arrayLength);
 		for (int i = 0; i < arrayLength; i++) {
 			DocumentContext curDoc = JsonPath.parse(jsonProvider.getArrayIndex(arry, i));
@@ -182,12 +161,46 @@ public class JsonPathReflector {
 					throw new RuntimeException(errorMsg);
 				}
 			}
+			
 			if (null != item) {
 				lst.add(item);
 			}
 		}
-
 		return lst;
+	}
+
+	private Object readJSONAsArray(DocumentContext doc, JsonPathElement elmt) throws ReflectiveOperationException {
+		Object arry = null;
+		Object res = readValue(doc, elmt);
+		if (jsonProvider.isArray(res)) {
+			arry = res;
+		} else {
+			// covert to array if resp is single
+			logger.info(String.format(
+					"Consider changing Collection annotated field[%s] to single object since json response is not an array!",
+					elmt));
+			arry = configuration.jsonProvider().createArray();
+			jsonProvider.setArrayIndex(arry, 0, res);
+		}
+		return arry;
+	}
+
+	private Class<?> resolveFieldClass(Field f) {
+		// Figure out entity type
+		Class<?> fieldClz = null;
+		if (f.getType().isArray()) {
+			// f.getClass is good for array
+			fieldClz = f.getType().getComponentType();
+		} else if (Collection.class.isAssignableFrom(f.getType()) && f.getGenericType() instanceof ParameterizedType) {
+			// get collection generic type if exists
+			Type entityType = ((ParameterizedType) f.getGenericType()).getActualTypeArguments()[0];
+			try {
+				fieldClz = Class.forName(TypeUtils.toString(entityType));
+			} catch (ClassNotFoundException e) {
+				// No class? take it as weak type, return json object
+			}
+		}
+		return fieldClz;
 	}
 
 	private void evalLangField(DocumentContext doc, JsonPathElement elmt, Object obj, Field f)
