@@ -89,6 +89,9 @@ public class JsonPathReflector {
 				.filter(f -> null != f.getAnnotation(JsonPathElement.class))
 				.forEach(f -> {
 					JsonPathElement elmt = f.getAnnotation(JsonPathElement.class);
+					String errorMsg = String.format(String.format(
+							"Json path field %s:[%s] can't not be evaluated, considering creating a Interpreter for arbitary objects.",
+							f.getName(), f.getType()));
 					try {
 						if (Package.getPackage("java.lang").equals(f.getType().getPackage())) {
 							// Handle for java lang type fields
@@ -100,10 +103,14 @@ public class JsonPathReflector {
 						} else if (null != ConstructorUtils.getAccessibleConstructor(f.getType())) {
 							// Handle for Custom type fields
 							evalPojoField(doc, elmt, obj, f);
+						} else {
+							logger.info(errorMsg);
+							if (elmt.required()) {
+								throw new RuntimeException(errorMsg);
+							}
 						}
 					} catch (ReflectiveOperationException e) {
-						logger.info(String.format("Json path field %s:[%s] can't not be evaluated",
-								f.getName(), f.getType()));
+						logger.info(errorMsg);
 						if (elmt.required()) {
 							throw new RuntimeException(e);
 						}
@@ -118,7 +125,8 @@ public class JsonPathReflector {
 		List<Object> resLst = readJSONArray(doc, elmt, obj, f);
 		Object arry = Array.newInstance(f.getType().getComponentType(), resLst.size());
 		FieldUtils.writeField(f, obj, arry, true);
-		throw new NotImplementedException("The array type is not implemented, please use the java.util.Collection classes =_+");
+		throw new NotImplementedException(
+				"The array type is not implemented, please use the java.util.Collection classes =_+");
 	}
 
 	private void evalPojoField(DocumentContext doc, JsonPathElement elmt, Object obj, Field f)
@@ -160,7 +168,7 @@ public class JsonPathReflector {
 					throw new RuntimeException(errorMsg);
 				}
 			}
-			
+
 			if (null != item) {
 				lst.add(item);
 			}
