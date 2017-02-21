@@ -20,4 +20,6 @@ class JsonTester {
 		Business biz = jr.from(IOUtils.toString(url), new Business())
 		println ReflectionToStringBuilder.reflectionToString(biz);
 	}
+	
+	
 }

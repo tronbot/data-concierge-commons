@@ -9,10 +9,10 @@ import java.lang.annotation.Target;
  * @author <a href="mailto:juanyong.zhang@gmail.com">Juanyong Zhang</a>
  * @date Feb 13, 2017
  */
-@Target({ ElementType.ANNOTATION_TYPE, ElementType.FIELD})
+@Target({ ElementType.ANNOTATION_TYPE,ElementType.TYPE, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface JsonPathField {
-	String value() default "";
+public @interface JsonPathElement {
+	String value() default "$"; // default to be current path
 
 	Class<? extends Interpreter<?>> interpreter() default EmptyInterpreter.class;
 
