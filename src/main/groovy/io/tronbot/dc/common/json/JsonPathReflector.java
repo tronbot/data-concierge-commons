@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import com.jayway.jsonpath.Predicate;
 import com.jayway.jsonpath.spi.json.JsonProvider;
 
@@ -69,7 +70,7 @@ public class JsonPathReflector {
 			} else {
 				evalFields(doc, obj);
 			}
-		} catch (Exception e) {
+		} catch (ReflectiveOperationException e) {
 			logger.info(String.format("Json path object %s:[%s] can't not be evaluated",
 					obj, elmt));
 			throw new RuntimeException(e);
@@ -217,10 +218,19 @@ public class JsonPathReflector {
 	}
 
 	private Object readValue(DocumentContext doc, JsonPathElement elmt) throws ReflectiveOperationException {
-		Object val = doc.read(elmt.value());
-		if (!elmt.interpreter().equals(EmptyInterpreter.class)) {
-			val = ConstructorUtils.invokeExactConstructor(elmt.interpreter()).interpret(val);
+		Object val = null;
+		try {
+			val = doc.read(elmt.value());
+			if (!elmt.interpreter().equals(EmptyInterpreter.class)) {
+				val = ConstructorUtils.invokeExactConstructor(elmt.interpreter()).interpret(val);
+			}
+		} catch (PathNotFoundException e) {
+			logger.info(e.getMessage());
+			if (elmt.required()) {
+				throw e;
+			}
 		}
+
 		return val;
 	}
 
