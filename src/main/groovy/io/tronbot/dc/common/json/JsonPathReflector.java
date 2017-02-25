@@ -71,7 +71,7 @@ public class JsonPathReflector {
 				evalFields(doc, obj);
 			}
 		} catch (ReflectiveOperationException e) {
-			logger.info(String.format("Json path object %s:[%s] can't not be evaluated",
+			logger.debug(String.format("Json path object %s:[%s] can't not be evaluated",
 					obj, elmt));
 			throw new RuntimeException(e);
 		}
@@ -105,13 +105,13 @@ public class JsonPathReflector {
 							// Handle for Custom type fields
 							evalPojoField(doc, elmt, obj, f);
 						} else {
-							logger.info(errorMsg);
+							logger.debug(errorMsg);
 							if (elmt.required()) {
 								throw new RuntimeException(errorMsg);
 							}
 						}
 					} catch (ReflectiveOperationException e) {
-						logger.info(errorMsg);
+						logger.debug(errorMsg);
 						if (elmt.required()) {
 							throw new RuntimeException(e);
 						}
@@ -164,7 +164,7 @@ public class JsonPathReflector {
 			} else {
 				String errorMsg = String.format("Json path field %s:[%s] can't not be evaluated",
 						f.getName(), f.getType());
-				logger.info(errorMsg);
+				logger.debug(errorMsg);
 				if (elmt.required()) {
 					throw new RuntimeException(errorMsg);
 				}
@@ -184,7 +184,7 @@ public class JsonPathReflector {
 			arry = res;
 		} else {
 			// covert to array if resp is single
-			logger.info(String.format(
+			logger.debug(String.format(
 					"Consider changing Collection annotated field[%s] to single object since json response is not an array!",
 					elmt));
 			arry = configuration.jsonProvider().createArray();
@@ -225,7 +225,7 @@ public class JsonPathReflector {
 				val = ConstructorUtils.invokeExactConstructor(elmt.interpreter()).interpret(val);
 			}
 		} catch (PathNotFoundException e) {
-			logger.info(e.getMessage());
+			logger.debug(e.getMessage());
 			if (elmt.required()) {
 				throw e;
 			}
