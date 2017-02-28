@@ -9,16 +9,14 @@ import groovy.util.logging.Log4j
  * @date Feb 13, 2017
  */
 @Log4j
-class ArrayToSingleInterpreter implements Interpreter<String> {
-	String interpret(Object raw){
-		if(raw instanceof List){
-			if(raw){
-				return raw.first().toString()
+class ArrayToSingleInterpreter implements Interpreter<Object> {
+	Object interpret(Object raw){
+		if(null != raw){
+			if(raw instanceof List){
+				return raw?.find()
 			}else{
-				return null;
+				throw new UnexpectedValueExceptione(List.class, raw?.getClass())
 			}
-		}else{
-			log.warn "${ReflectionToStringBuilder.toString(raw)} is not JSON array!"
 		}
 		return raw
 	}

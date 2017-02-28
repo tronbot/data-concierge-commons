@@ -4,5 +4,5 @@ package io.tronbot.dc.common.json;
  * @date Feb 13, 2017
  */
 public interface Interpreter<T> {
-	T interpret(Object raw);
+	T interpret(Object raw) throws UnexpectedValueExceptione;
 }

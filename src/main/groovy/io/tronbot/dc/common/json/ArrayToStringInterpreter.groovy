@@ -11,10 +11,12 @@ import groovy.util.logging.Log4j
 @Log4j
 class ArrayToStringInterpreter implements Interpreter<String> {
 	String interpret(Object raw){
-		if(raw instanceof List){
-			raw.join(', ')
-		}else{
-			log.warn "${ReflectionToStringBuilder.toString(raw)} is not JSON array!"
+		if(null != raw){
+			if(raw instanceof List){
+				return raw.join(', ')
+			}else{
+				throw new UnexpectedValueExceptione(List.class, raw?.getClass())
+			}
 		}
 		return raw
 	}

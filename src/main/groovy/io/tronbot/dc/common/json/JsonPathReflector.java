@@ -19,7 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.jayway.jsonpath.Configuration;
 import com.jayway.jsonpath.DocumentContext;
 import com.jayway.jsonpath.JsonPath;
-import com.jayway.jsonpath.PathNotFoundException;
+import com.jayway.jsonpath.JsonPathException;
 import com.jayway.jsonpath.Predicate;
 import com.jayway.jsonpath.spi.json.JsonProvider;
 
@@ -224,7 +224,7 @@ public class JsonPathReflector {
 			if (!elmt.interpreter().equals(EmptyInterpreter.class)) {
 				val = ConstructorUtils.invokeExactConstructor(elmt.interpreter()).interpret(val);
 			}
-		} catch (PathNotFoundException e) {
+		} catch (JsonPathException e) {
 			logger.debug(e.getMessage());
 			if (elmt.required()) {
 				throw e;

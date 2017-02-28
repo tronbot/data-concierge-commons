@@ -11,6 +11,6 @@ import groovy.util.logging.Log4j
 @Log4j
 class ObjectToStringInterpreter implements Interpreter<String> {
 	String interpret(Object raw){
-		return raw ? raw.toString() : null
+		return raw?.toString()
 	}
 }
