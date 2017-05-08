@@ -1,4 +1,4 @@
-package com.chpinfo.dc.commons.json;
+package io.tronbot.dc.common.json;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

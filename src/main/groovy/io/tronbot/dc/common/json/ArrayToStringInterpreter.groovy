@@ -1,4 +1,4 @@
-package com.chpinfo.dc.commons.json
+package io.tronbot.dc.common.json
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder
 
@@ -15,7 +15,7 @@ class ArrayToStringInterpreter implements Interpreter<String> {
 			if(raw instanceof List){
 				return raw.join(', ')
 			}else{
-				throw new UnexpectedValueException(List.class, raw?.getClass())
+				throw new UnexpectedValueExceptione(List.class, raw?.getClass())
 			}
 		}
 		return raw

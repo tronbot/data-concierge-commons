@@ -1,4 +1,4 @@
-package com.chpinfo.dc.commons.json
+package io.tronbot.dc.common.json
 
 import org.apache.commons.lang3.StringUtils
 
@@ -15,7 +15,7 @@ class PostalCodeInterpreter implements Interpreter<String> {
 			if(raw instanceof String){
 				return StringUtils.substring(raw, 0, 5)
 			}else{
-				throw new UnexpectedValueException(String.class, raw?.getClass())
+				throw new UnexpectedValueExceptione(String.class, raw?.getClass())
 			}
 		}
 		return raw
