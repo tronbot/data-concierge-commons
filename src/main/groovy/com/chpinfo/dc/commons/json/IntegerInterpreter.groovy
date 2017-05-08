@@ -1,4 +1,4 @@
-package io.tronbot.dc.common.json
+package com.chpinfo.dc.commons.json
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder
 

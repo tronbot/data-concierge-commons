@@ -1,4 +1,4 @@
-package io.tronbot.dc.common.json
+package com.chpinfo.dc.commons.json
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder
 
@@ -15,7 +15,7 @@ class ArrayToSingleInterpreter implements Interpreter<Object> {
 			if(raw instanceof List){
 				return raw?.find()
 			}else{
-				throw new UnexpectedValueExceptione(List.class, raw?.getClass())
+				throw new UnexpectedValueException(List.class, raw?.getClass())
 			}
 		}
 		return raw
